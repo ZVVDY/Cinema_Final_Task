@@ -13,7 +13,7 @@ public class PersonRepositoryImp implements PersonRepository {
     private Connection connect;
     private PreparedStatement ps;
     private String sql;
-   // private ResultSet rs;
+    // private ResultSet rs;
     private ConnectionManager connectionManager;
 
 
@@ -22,7 +22,7 @@ public class PersonRepositoryImp implements PersonRepository {
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            sql="INSERT INTO person (username, password) VALUES (?,?)";
+            sql = "INSERT INTO person (username, password) VALUES (?,?)";
             ps = connect.prepareStatement(sql);
             ps.setString(1, person.getLoginPerson());
             ps.setString(2, person.getPasswordPerson());
@@ -36,18 +36,18 @@ public class PersonRepositoryImp implements PersonRepository {
 
     @Override
     public boolean searchForARegisteredPerson(String userName) {
-        boolean isExistPerson=false;
+        boolean isExistPerson = false;
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            sql =String.format("SELECT EXISTS (SELECT * FROM `person` WHERE  username = '%s')",userName);
+            sql = String.format("SELECT EXISTS (SELECT * FROM `person` WHERE  username = '%s')", userName);
             ps = connect.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
                 int count = rs.getInt(1);
-                if (count==1){
-                    isExistPerson=true;
+                if (count == 1) {
+                    isExistPerson = true;
                 }
             }
 
@@ -63,39 +63,39 @@ public class PersonRepositoryImp implements PersonRepository {
     }
 
     @Override
-    public boolean readPerson(Person person) {
+    public boolean searchForARegisteredPersonPassword(String userName, String personPassword) {
+        boolean isExistPerson = false;
         try {
-
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            sql ="SELECT username FROM `person` WHERE " +person.getLoginPerson()+"=?";
+            sql = String.format("SELECT EXISTS (SELECT * FROM person WHERE password = '%s' AND username = '%s')", personPassword, userName);
             ps = connect.prepareStatement(sql);
-            ps.setString(1, person.getLoginPerson());
-//                        rs= ps.executeQuery();
-//                        if ((rs.next())){
-//                            System.out.println(person);
-//                            System.out.println(rs);
-//                        }
+            ResultSet rs = ps.executeQuery(sql);
 
-            //String s=statement.
-            //2statement.executeQuery();
-           // SELECT password  FROM person WHERE username = userName
-            //s1.equal(s2);
+                while (rs.next()) {
+                    int count = rs.getInt(1);
+                    if (count == 1) {
+                        isExistPerson = true;
+                    }
+                if (count==0) {
+                    System.out.println("Пароль введен не верно");
+                        isExistPerson = false;
+                    }
+                }
 
-            //statement.execute();
+
         } catch (SQLException e) {
             e.printStackTrace();
             //System.out.println("No connection MySQL");
 
+
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        return true;
-
+return isExistPerson;
     }
 
-    @Override
+        @Override
     public void updatePerson(Person person) {
 
     }
@@ -104,6 +104,4 @@ public class PersonRepositoryImp implements PersonRepository {
     public void deletePerson(Long id) {
 
     }
-
-
 }

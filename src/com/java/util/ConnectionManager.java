@@ -17,8 +17,7 @@ public class ConnectionManager {
             System.out.println("Connection server");
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("No connection MySQL");
+            System.err.println("No connection MySQL");
         }
     }
 }

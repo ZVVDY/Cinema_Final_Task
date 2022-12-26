@@ -7,7 +7,7 @@ public interface PersonRepository {
 
     boolean searchForARegisteredPerson(String userName);
 
-    boolean readPerson(Person person);
+    boolean searchForARegisteredPersonPassword(String userName, String personPassword);
     void updatePerson(Person person);
     void deletePerson(Long id);
 

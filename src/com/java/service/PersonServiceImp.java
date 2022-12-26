@@ -3,9 +3,6 @@ package com.java.service;
 import com.java.model.Person;
 import com.java.repository.PersonRepository;
 import com.java.repository.PersonRepositoryImp;
-import com.mysql.jdbc.Connection;
-
-import java.sql.PreparedStatement;
 
 
 public class PersonServiceImp implements PersonService {
@@ -17,9 +14,12 @@ personRepository.createPerson(person);
     }
 
     @Override
-    public boolean read(Person person) {
-boolean b =personRepository.readPerson(person);
-        return b;
+    public boolean readLogin(String nameLog) {
+        return personRepository.searchForARegisteredPerson(nameLog);
+    }
+
+    public boolean readPasswordAddLog(String logName, String passwordLog) {
+        return personRepository.searchForARegisteredPersonPassword(logName,passwordLog);
     }
 
     @Override
