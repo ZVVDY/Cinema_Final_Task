@@ -1,6 +1,7 @@
 package com.java.service;
 
 import com.java.model.Person;
+import com.java.model.RoleClient;
 
 public interface PersonService {
     void create(Person person) throws ClassNotFoundException;

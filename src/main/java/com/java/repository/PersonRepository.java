@@ -1,6 +1,7 @@
 package com.java.repository;
 
 import com.java.model.Person;
+import com.java.model.RoleClient;
 
 public interface PersonRepository {
     void createPerson (Person person) throws ClassNotFoundException;

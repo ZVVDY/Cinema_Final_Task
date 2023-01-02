@@ -24,7 +24,6 @@ public class GeneralController {
         System.out.println("Добро пожаловать в КИНОТЕАТР!");
         System.out.println("Введите" + "\n" + "1 - войти в приложение" + "\n" +
                 "2 - зарегистрироваться в приложении" + "\n" + "0 - выйти из приложения");
-
         try {
             number = scanner.nextInt();
             switch (number) {

@@ -1,6 +1,7 @@
 package com.java.service;
 
 import com.java.model.Person;
+import com.java.model.RoleClient;
 import com.java.repository.PersonRepository;
 import com.java.repository.PersonRepositoryImp;
 
