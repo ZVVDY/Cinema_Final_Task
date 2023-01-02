@@ -7,14 +7,17 @@ public class TicketServiceImp implements TicketService{
 private TicketRepository repository = new TicketRepositoryImp();
 
     @Override
+    // TODO
+
     public void buyAMovieTicket(String loginApp) {
 
         repository.buyAMovieTicketPerson(loginApp);
+        //добавить возврат из метода
     }
 
     @Override
-    public void refundMovieTicket() {
-
+    public void refundMovieTicket(String namePerson) {
+repository.refundMovieTicketPerson(namePerson);
     }
 
     @Override

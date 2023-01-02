@@ -29,8 +29,10 @@ public class GeneralController {
             switch (number) {
                 case 1:
                     personController.logInToTheAppCinema();
+                    break;
                 case 2:
                     personController.registrationPersonInTheAppCinema();
+                    break;
                 case 0:
                     System.out.println("Вы вышли из программы Кинотеатр");
                     break;

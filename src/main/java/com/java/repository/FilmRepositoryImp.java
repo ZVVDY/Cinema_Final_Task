@@ -40,10 +40,10 @@ public class FilmRepositoryImp implements FilmRepository {
                 switch (scanner.nextInt()) {
                     case 1:
                         service.buyAMovieTicket(loginApp);
+                        break;
                     case 0:
                         break;
                 }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
