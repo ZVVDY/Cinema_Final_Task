@@ -3,11 +3,14 @@ package com.java.repository;
 import com.java.model.Film;
 import com.java.service.TicketService;
 import com.java.service.TicketServiceImp;
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 
 public class FilmRepositoryImp implements FilmRepository {
@@ -68,16 +71,21 @@ public class FilmRepositoryImp implements FilmRepository {
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            System.out.println("Введите №id мероприятие /фильм");
-            film.setIdMovie(scanner.nextInt());
+//            System.out.println("Введите №id мероприятие /фильм");
+//            film.setIdMovie(scanner.nextInt());
             System.out.println("Введите  название мероприятия /фильм");
             film.setNameMovie(reader.readLine());
             System.out.println("Введите  дату и время  мероприятия /фильм в формате хххх-хх-хх хх:хх:хх( например 2023-01-07 16:00:00)");
-            film.setDateAndTimeFilm(readerTwo.readLine());
+            String dateInString = readerTwo.readLine();
+            Date date = DateUtils.parseDate(dateInString,
+                    new String[] { "yyyy-MM-dd HH:mm:ss" });
+
+            film.setDateAndTimeFilm(date);
             System.out.println("Введите  количество мест (максимум 50), мероприятия /фильм");
             film.setQuantityTicket(scanner.nextInt());
+
             //sql = "INSERT INTO film (id, namemovie, dateandtimefilm, quantityticket) VALUES (?,?,?,?)";
-            sql = String.format("INSERT INTO 'film' 'id'=%d, 'namemovie'='%s', 'dateandtimefilm'='%s', 'quantityticket'=%d" , film.getIdMovie(),film.getNameMovie(),film.getDateAndTimeFilm(),film.getQuantityTicket() );
+            sql = String.format("INSERT INTO 'film' 'namemovie'='%s', 'dateandtimefilm'='%s', 'quantityticket'=%d" ,film.getNameMovie(),film.getDateAndTimeFilm(),film.getQuantityTicket() );
             //sql="INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES ('film.getIdMovie()','film.getNameMovie()','getDateAndTimeFilm()','getQuantityTicket()')";
             //sql = "INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES (?,'?','?',?)";
             //INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES ('2','Home','2023-01-07 16:00:00','45');
@@ -99,7 +107,7 @@ public class FilmRepositoryImp implements FilmRepository {
             e.printStackTrace();
             System.out.println("No connection MySQL");
 
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (ClassNotFoundException | IOException | ParseException e) {
             throw new RuntimeException(e);
         }
     }

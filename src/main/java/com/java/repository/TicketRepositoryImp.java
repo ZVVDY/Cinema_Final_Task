@@ -132,20 +132,22 @@ public class TicketRepositoryImp implements TicketRepository {
         }
     }
 
-    public boolean createTicket(int id, String nameFilm, int numberTicket) {
+    public void createTicket() {
+        Ticket ticket = new Ticket();
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
+
             int s = 1;
-            while (s < numberTicket) {
-                sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
-                ps = connect.prepareStatement(sql);
-                ps.setInt(1, id);
-                ps.setString(2, nameFilm);
-                ps.setInt(3, numberTicket);
-                ps.execute();
-                s++;
-            }
+//            while (s < numberTicket) {
+//                sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
+//                ps = connect.prepareStatement(sql);
+//                ps.setInt(1, id);
+//                ps.setString(2, nameFilm);
+//                ps.setInt(3, s);
+//                ps.execute();
+//                s++;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
@@ -154,6 +156,6 @@ public class TicketRepositoryImp implements TicketRepository {
             throw new RuntimeException(e);
         }
 
-return true;
+
     }
 }

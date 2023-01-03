@@ -31,7 +31,7 @@ public class TicketServiceImp implements TicketService {
     }
 
     @Override
-    public boolean createTicket(int id, String nameFilm, int numberTicket) {
-        return repository.createTicket(id,nameFilm,numberTicket);
+    public void createTicket() {
+        repository.createTicket();
     }
 }

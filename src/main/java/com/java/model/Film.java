@@ -5,7 +5,7 @@ import java.util.Date;
 public class Film {
     private int idMovie;
     private String nameMovie;
-    private String dateAndTimeFilm;
+    private Date dateAndTimeFilm;
     private int quantityTicket;
 
     public int getIdMovie() {
@@ -24,11 +24,11 @@ public class Film {
         this.nameMovie = nameMovie;
     }
 
-    public String getDateAndTimeFilm() {
+    public Date getDateAndTimeFilm() {
         return dateAndTimeFilm;
     }
 
-    public void setDateAndTimeFilm(String dateAndTimeFilm) {
+    public void setDateAndTimeFilm(Date dateAndTimeFilm) {
         this.dateAndTimeFilm = dateAndTimeFilm;
     }
 
@@ -40,7 +40,7 @@ public class Film {
         this.quantityTicket = quantityTicket;
     }
 
-    public Film(int idMovie, String nameMovie, String dateAndTimeFilm, int quantityTicket) {
+    public Film(int idMovie, String nameMovie, Date dateAndTimeFilm, int quantityTicket) {
         this.idMovie = idMovie;
         this.nameMovie = nameMovie;
         this.dateAndTimeFilm = dateAndTimeFilm;

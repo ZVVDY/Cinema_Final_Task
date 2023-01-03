@@ -4,5 +4,5 @@ public interface TicketRepository {
     void buyAMovieTicketPerson(String loginApp);
     void refundMovieTicketPerson(String namePerson);
     void viewPurchasedMovieTicketsPerson(String nameLogin);
-    boolean createTicket(int id, String nameFilm,int numberTicket);
+    void createTicket();
 }
