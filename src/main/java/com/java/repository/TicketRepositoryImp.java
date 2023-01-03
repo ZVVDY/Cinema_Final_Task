@@ -133,11 +133,10 @@ public class TicketRepositoryImp implements TicketRepository {
     }
 
     public void createTicket() {
-        Ticket ticket = new Ticket();
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            sql = "SELECT `id`, `namemovie`, `dateandtimefilm`, `quantityticket` FROM `film`";
+            sql = "SELECT id, namemovie, dateandtimefilm, quantityticket FROM film";
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -146,25 +145,25 @@ public class TicketRepositoryImp implements TicketRepository {
             }
             System.out.println("Введите Id фильма для добавления билетов");
             int scanId = scanner.nextInt();
+            sql = String.format("SELECT id, namemovie, dateandtimefilm, quantityticket FROM film WHERE id = %d", scanId);
+            ps = connect.prepareStatement(sql);
+            resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                if (scanId == Integer.parseInt(resultSet.getString("id"))) {
-                    int s = 1;
-                    int id = resultSet.getInt("id");
-                    String nameFilm = resultSet.getString("namemovie");
-                    int numberPlace = resultSet.getInt("quantityticket");
-                    while (s < numberPlace) {
-                        sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
-                        ps = connect.prepareStatement(sql);
-                        ps.setInt(1, id);
-                        ps.setString(2, nameFilm);
-                        ps.setInt(3, s);
-                        ps.execute();
-                        s++;
-                    }
+                int s = 1;
+                int id = Integer.parseInt(resultSet.getString("id"));
+                String nameFilm = resultSet.getString("namemovie");
+                int numberPlace = Integer.parseInt(resultSet.getString("quantityticket"));
+                while (s <= numberPlace) {
+                    sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
+                    ps = connect.prepareStatement(sql);
+                    ps.setInt(1, id);
+                    ps.setString(2, nameFilm);
+                    ps.setInt(3, s);
+                    ps.execute();
+                    s++;
                 }
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
 

@@ -14,12 +14,12 @@ public class ManagerController {
     private Date date = new Date();
 
     protected void menuManagerController(String loginInApp) {
-        System.out.println("Вы вошли в приложение под логином: " + loginInApp);
-        System.out.println("Дата входа " + date);
-        System.out.println("1. Просмотреть доступные фильмы/мероприятия");
-        System.out.println("2. Добавить фильмы/мероприятия");
-        System.out.println("3. Добавить билеты в фильмы/мероприятия");
-        System.out.println("4. Купить  билеты на фильмы/мероприятия для пользователя");
+        System.out.println("Вы вошли в приложение под логином: (You are logged into the app using:)" + loginInApp);
+        System.out.println("Дата входа (Release date) " + date);
+        System.out.println("1. Просмотреть доступные фильмы/мероприятия(View available films of the event");
+        System.out.println("2. Добавить фильмы/мероприятия (Add MoviesEvents");
+        System.out.println("3. Добавить билеты в фильмы/мероприятия (Add Tickets to MoviesEvents)");
+        System.out.println("4. Купить  билеты на фильмы/мероприятия для пользователя (Buy event movie tickets for a user) ");
         System.out.println("5. Возвратить билеты на фильмы/мероприятия");
         System.out.println("0. Выход");
         int number = scanner.nextInt();
