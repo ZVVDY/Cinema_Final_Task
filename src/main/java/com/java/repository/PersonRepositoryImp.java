@@ -2,9 +2,9 @@ package com.java.repository;
 
 import com.java.model.Person;
 import com.java.model.RoleClient;
-import com.java.util.ConnectionManager;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class PersonRepositoryImp implements PersonRepository {
     private static String driver = "com.mysql.jdbc.Driver";
@@ -15,8 +15,7 @@ public class PersonRepositoryImp implements PersonRepository {
     private PreparedStatement ps;
     private String sql;
 
-    private ConnectionManager connectionManager;
-    private RoleClient roleClient;
+    private Scanner scanner = new Scanner(System.in);
 
     @Override
     public void createPerson(Person person) throws ClassNotFoundException {
@@ -72,16 +71,16 @@ public class PersonRepositoryImp implements PersonRepository {
             ps = connect.prepareStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
 
-                while (rs.next()) {
-                    int count = rs.getInt(1);
-                    if (count == 1) {
-                        isExistPerson = true;
-                    }
-                if (count==0) {
-                    System.err.println("Пароль введен не верно(Password entered is incorrect)");
-                        isExistPerson = false;
-                    }
+            while (rs.next()) {
+                int count = rs.getInt(1);
+                if (count == 1) {
+                    isExistPerson = true;
                 }
+                if (count == 0) {
+                    System.err.println("Пароль введен не верно(Password entered is incorrect)");
+                    isExistPerson = false;
+                }
+            }
 
 
         } catch (SQLException e) {
@@ -92,9 +91,10 @@ public class PersonRepositoryImp implements PersonRepository {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-return isExistPerson;
+        return isExistPerson;
     }
-//public  RoleClient seachRole(){
+
+    //public  RoleClient seachRole(){
 //    try {
 //        Class.forName(driver);
 //        connect = DriverManager.getConnection(url, username, password);
@@ -125,7 +125,7 @@ return isExistPerson;
 //
 //}
 //}
-        @Override
+    @Override
     public void updatePerson(Person person) {
 
     }
@@ -133,5 +133,29 @@ return isExistPerson;
     @Override
     public void deletePerson(Long id) {
 
+    }
+
+    @Override
+    public String searchForAPersonInTheDatabase() {
+
+        try {
+            Class.forName(driver);
+            connect = DriverManager.getConnection(url, username, password);
+            System.out.println("Список пользователей ()");
+            sql = "SELECT * FROM `person` `username` WHERE `role_client`='CLIENT_PERSON'";
+            ps = connect.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println("id" + resultSet.getString("id") + " username " + resultSet.getString("username"));
+            }
+            System.out.println("Введите и выберите пользователя");
+            String nameLogin = scanner.nextLine();
+
+            return nameLogin;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -43,6 +43,7 @@ public class FilmRepositoryImp implements FilmRepository {
             switch (scanner.nextInt()) {
                 case 1:
                     service.buyAMovieTicket(loginApp);
+
                     break;
                 case 0:
                     break;
@@ -61,7 +62,6 @@ public class FilmRepositoryImp implements FilmRepository {
     public void editEventsAndMovies() {
 
 
-
     }
 
     @Override
@@ -71,43 +71,22 @@ public class FilmRepositoryImp implements FilmRepository {
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-//            System.out.println("Введите №id мероприятие /фильм");
-//            film.setIdMovie(scanner.nextInt());
             System.out.println("Введите  название мероприятия /фильм");
             film.setNameMovie(reader.readLine());
             System.out.println("Введите  дату и время  мероприятия /фильм в формате хххх-хх-хх хх:хх:хх( например 2023-01-07 16:00:00)");
             String dateInString = readerTwo.readLine();
-            Date date = DateUtils.parseDate(dateInString,
-                    new String[] { "yyyy-MM-dd HH:mm:ss" });
-
-            film.setDateAndTimeFilm(date);
+            film.setDateAndTimeFilm(dateInString);
             System.out.println("Введите  количество мест (максимум 50), мероприятия /фильм");
             film.setQuantityTicket(scanner.nextInt());
-
-            //sql = "INSERT INTO film (id, namemovie, dateandtimefilm, quantityticket) VALUES (?,?,?,?)";
-            sql = String.format("INSERT INTO 'film' 'namemovie'='%s', 'dateandtimefilm'='%s', 'quantityticket'=%d" ,film.getNameMovie(),film.getDateAndTimeFilm(),film.getQuantityTicket() );
-            //sql="INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES ('film.getIdMovie()','film.getNameMovie()','getDateAndTimeFilm()','getQuantityTicket()')";
-            //sql = "INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES (?,'?','?',?)";
-            //INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES ('2','Home','2023-01-07 16:00:00','45');
-            //INSERT INTO `film`(`id`, `namemovie`, `dateandtimefilm`, `quantityticket`) VALUES (4,'Операция Ы','2023-01-06 16:00:00',50);
+            sql = String.format("INSERT INTO film(namemovie, dateandtimefilm, quantityticket) VALUES ('%s','%s',%d)", film.getNameMovie(), film.getDateAndTimeFilm(), film.getQuantityTicket());
             ps = connect.prepareStatement(sql);
-//            ps.setInt(1,film.getIdMovie());
-//            ps.setString(2, film.getNameMovie());
-//            ps.setString(3, film.getDateAndTimeFilm());
-//            ps.setInt(4, film.getQuantityTicket());
             ps.execute();
-           boolean ad = ps.execute();
-            if (ad) {
-                int a = film.getIdMovie();
-               // boolean ticket = service.createTicket(a, film.getNameMovie(), film.getQuantityTicket());
-                System.out.println("Билеты созданы");//Мероприятие создано"+film
-
-            }
+//TODO хочу создавать билеты добавить метод
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
 
-        } catch (ClassNotFoundException | IOException | ParseException e) {
+        } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,6 +1,5 @@
 package com.java.service;
 
-import com.java.controller.PersonController;
 import com.java.repository.TicketRepository;
 import com.java.repository.TicketRepositoryImp;
 
@@ -11,10 +10,9 @@ public class TicketServiceImp implements TicketService {
     @Override
 
     public void buyAMovieTicket(String loginApp) {
-        PersonController personController = new PersonController();
         repository.buyAMovieTicketPerson(loginApp);
-        System.out.println("Pokypka bileta vipolnena");
-        personController.menuPersonController(loginApp);//добавить возврат из метода
+        System.out.println("Покупка билета выполнена");
+
 
     }
 

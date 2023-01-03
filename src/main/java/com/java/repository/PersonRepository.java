@@ -12,5 +12,6 @@ public interface PersonRepository {
     //void seachRole(String userName, String personPassword);
     void updatePerson(Person person);
     void deletePerson(Long id);
+    String searchForAPersonInTheDatabase();
 
 }

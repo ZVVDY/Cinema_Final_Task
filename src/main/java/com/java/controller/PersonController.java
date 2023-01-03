@@ -16,7 +16,7 @@ public class PersonController {
     private Scanner scanner = new Scanner(System.in);
     private Scanner scannerTwo = new Scanner(System.in);
     private Date date = new Date();
-    //private String loginRegist;
+    private ManagerController managerController = new ManagerController();
 
     public void menuPersonController(String loginInApp) {
         System.out.println("Вы вошли в приложение, используя логин: (You are logged into the app using: )" + loginInApp);
@@ -24,20 +24,23 @@ public class PersonController {
         System.out.println("1. Просмотреть доступные для покупки фильмы/мероприятия(View events available for purchase of the film)");
         System.out.println("2. Просмотреть фильмы/мероприятия (Watch  Movies and Events) ");
         System.out.println("3. Посмотреть купленные фильмы/мероприятия (View purchased films of the event)");
-        System.out.println("4. Создать мероприятие");
+        System.out.println("4. Вход менеджера");
         System.out.println("0. Выход (Exit)");
         int number = scannerTwo.nextInt();
         switch (number) {
             case 1:
                 filmService.viewEventsAndMovies(loginInApp);
+                menuPersonController(loginInApp);
                 break;
             case 2:
                 ticketService.viewPurchasedMovieTickets(loginInApp);
+                menuPersonController(loginInApp);
                 break;
             case 3:
                 ticketService.refundMovieTicket(loginInApp);
+                menuPersonController(loginInApp);
                 break;
-            case 4:filmService.createEventsAndMovies();
+            case 4:managerController.menuManagerController(loginInApp);
             break;
             case 0:
                 break;
