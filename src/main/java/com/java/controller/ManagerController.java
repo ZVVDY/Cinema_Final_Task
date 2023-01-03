@@ -1,15 +1,14 @@
 package com.java.controller;
 
-import javax.xml.crypto.Data;
-import java.util.Locale;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ManagerController {
     Scanner scanner = new Scanner(System.in);
-
+private Date date = new Date();
     protected void menuManagerController(String loginInApp) {
         System.out.println("Вы вошли в приложение под логином: " + loginInApp);
-        //System.out.println("Дата входа " + date);
+        System.out.println("Дата входа " + date);
         System.out.println("1. Просмотреть доступные фильмы/мероприятия");
         System.out.println("2. Добавить фильмы/мероприятия");
         System.out.println("0. Выход");

@@ -78,7 +78,7 @@ public class PersonRepositoryImp implements PersonRepository {
                         isExistPerson = true;
                     }
                 if (count==0) {
-                    System.out.println("Пароль введен не верно");
+                    System.err.println("Пароль введен не верно(Password entered is incorrect)");
                         isExistPerson = false;
                     }
                 }
@@ -94,7 +94,37 @@ public class PersonRepositoryImp implements PersonRepository {
         }
 return isExistPerson;
     }
-
+//public  RoleClient seachRole(){
+//    try {
+//        Class.forName(driver);
+//        connect = DriverManager.getConnection(url, username, password);
+//        sql = String.format("SELECT EXISTS (SELECT * FROM person WHERE password = '%s' AND username = '%s', )", personPassword, userName);
+//        ps = connect.prepareStatement(sql);
+//        ResultSet rs = ps.executeQuery(sql);
+//
+//        while (rs.next()) {
+//            int count = rs.getInt(1);
+//            if (count == 1) {
+//                isExistPerson = true;
+//            }
+//            if (count==0) {
+//                System.err.println("Password entered is incorrect");//Пароль введен не верно
+//                isExistPerson = false;
+//            }
+//        }
+//
+//
+//    } catch (SQLException e) {
+//        e.printStackTrace();
+//        //System.out.println("No connection MySQL");
+//
+//
+//    } catch (ClassNotFoundException e) {
+//        throw new RuntimeException(e);
+//    }
+//
+//}
+//}
         @Override
     public void updatePerson(Person person) {
 

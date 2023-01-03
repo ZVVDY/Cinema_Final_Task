@@ -23,6 +23,11 @@ personRepository.createPerson(person);
         return personRepository.searchForARegisteredPersonPassword(logName,passwordLog);
     }
 
+//    @Override
+//    public void seachRole(String userName, String personPassword) {
+//        personRepository.seachRole(userName,personPassword);
+//    }
+
     @Override
     public void update(Person person) {
 

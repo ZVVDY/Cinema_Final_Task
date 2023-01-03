@@ -1,5 +1,7 @@
 package com.java.model;
 
+import java.util.Date;
+
 public class Film {
     private int idMovie;
     private String nameMovie;

@@ -9,6 +9,7 @@ public interface PersonRepository {
     boolean searchForARegisteredPerson(String userName);
 
     boolean searchForARegisteredPersonPassword(String userName, String personPassword);
+    //void seachRole(String userName, String personPassword);
     void updatePerson(Person person);
     void deletePerson(Long id);
 
