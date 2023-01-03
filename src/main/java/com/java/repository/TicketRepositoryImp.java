@@ -137,25 +137,39 @@ public class TicketRepositoryImp implements TicketRepository {
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-
-            int s = 1;
-//            while (s < numberTicket) {
-//                sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
-//                ps = connect.prepareStatement(sql);
-//                ps.setInt(1, id);
-//                ps.setString(2, nameFilm);
-//                ps.setInt(3, s);
-//                ps.execute();
-//                s++;
-//            }
-        } catch (SQLException e) {
+            sql = "SELECT `id`, `namemovie`, `dateandtimefilm`, `quantityticket` FROM `film`";
+            ps = connect.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("id") + " Film " + resultSet.getString("namemovie") + " Date film: " + resultSet.getString("dateandtimefilm") + " Ticket price: " +
+                        resultSet.getString("quantityticket"));
+            }
+            System.out.println("Введите Id фильма для добавления билетов");
+            int scanId = scanner.nextInt();
+            while (resultSet.next()) {
+                if (scanId == Integer.parseInt(resultSet.getString("id"))) {
+                    int s = 1;
+                    int id = resultSet.getInt("id");
+                    String nameFilm = resultSet.getString("namemovie");
+                    int numberPlace = resultSet.getInt("quantityticket");
+                    while (s < numberPlace) {
+                        sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
+                        ps = connect.prepareStatement(sql);
+                        ps.setInt(1, id);
+                        ps.setString(2, nameFilm);
+                        ps.setInt(3, s);
+                        ps.execute();
+                        s++;
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

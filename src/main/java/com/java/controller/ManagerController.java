@@ -34,10 +34,10 @@ public class ManagerController {
                 ticketService.createTicket();
                 break;
             case 4:
-                PersonController personController = new PersonController();
-                personController.menuPersonController(personService.searchForAPersonInTheDatabase());
+                ticketService.buyAMovieTicket(personService.searchForAPersonInTheDatabase());
                 break;
-            case 5:
+            case 5:ticketService.viewPurchasedMovieTickets(personService.searchForAPersonInTheDatabase());
+            break;
             case 0:
                 break;
             default:

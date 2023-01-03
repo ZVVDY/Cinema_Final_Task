@@ -45,7 +45,7 @@ public class PersonController {
             case 0:
                 break;
             default:
-                System.out.println("Enter menu number");//ведите номер меню
+                System.out.println("Введите номер меню (Enter menu number)");//ведите номер меню
                 break;
         }
 

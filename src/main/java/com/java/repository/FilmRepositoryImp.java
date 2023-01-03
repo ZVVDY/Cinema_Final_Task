@@ -81,7 +81,7 @@ public class FilmRepositoryImp implements FilmRepository {
             sql = String.format("INSERT INTO film(namemovie, dateandtimefilm, quantityticket) VALUES ('%s','%s',%d)", film.getNameMovie(), film.getDateAndTimeFilm(), film.getQuantityTicket());
             ps = connect.prepareStatement(sql);
             ps.execute();
-//TODO хочу создавать билеты добавить метод
+//TODO хочу создавать билеты, добавить метод
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
