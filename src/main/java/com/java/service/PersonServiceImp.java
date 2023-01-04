@@ -39,7 +39,7 @@ personRepository.createPerson(person);
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void delete() {
+personRepository.deletePerson();
     }
 }

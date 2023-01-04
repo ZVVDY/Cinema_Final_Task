@@ -7,6 +7,7 @@ public class Film {
     private String nameMovie;
     private String dateAndTimeFilm;
     private int quantityTicket;
+    private int costTicket;
 
     public int getIdMovie() {
         return idMovie;
@@ -40,14 +41,24 @@ public class Film {
         this.quantityTicket = quantityTicket;
     }
 
-    public Film(int idMovie, String nameMovie, String dateAndTimeFilm, int quantityTicket) {
+    public int getCostTicket() {
+        return costTicket;
+    }
+
+    public void setCostTicket(int costTicket) {
+        this.costTicket = costTicket;
+    }
+
+    public Film(){
+
+    }
+
+    public Film(int idMovie, String nameMovie, String dateAndTimeFilm, int quantityTicket, int costTicket) {
         this.idMovie = idMovie;
         this.nameMovie = nameMovie;
         this.dateAndTimeFilm = dateAndTimeFilm;
         this.quantityTicket = quantityTicket;
-    }
-    public Film(){
-
+        this.costTicket = costTicket;
     }
 
     @Override
@@ -57,6 +68,8 @@ public class Film {
                 ", nameMovie='" + nameMovie + '\'' +
                 ", dateAndTimeFilm='" + dateAndTimeFilm + '\'' +
                 ", quantityTicket=" + quantityTicket +
+                ", costTicket=" + costTicket +
                 '}';
     }
 }
+

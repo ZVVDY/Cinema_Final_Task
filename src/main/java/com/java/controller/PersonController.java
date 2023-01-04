@@ -17,14 +17,16 @@ public class PersonController {
     private Scanner scannerTwo = new Scanner(System.in);
     private Date date = new Date();
     private ManagerController managerController = new ManagerController();
+    private  AdministratorController administratorController = new AdministratorController();
 
-    public void menuPersonController(String loginInApp) {
+    public void menuPersonController(String loginInApp) throws ClassNotFoundException {
         System.out.println("Вы вошли в приложение, используя логин: (You are logged into the app using: )" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);//дата входа
         System.out.println("1. Просмотреть доступные для покупки фильмы/мероприятия(View events available for purchase of the film)");
         System.out.println("2. Просмотреть фильмы/мероприятия (Watch  Movies and Events) ");
         System.out.println("3. Посмотреть купленные фильмы/мероприятия (View purchased films of the event)");
         System.out.println("4. Вход менеджера");
+        System.out.println("5. Вход админа");
         System.out.println("0. Выход (Exit)");
         int number = scannerTwo.nextInt();
         switch (number) {
@@ -41,6 +43,8 @@ public class PersonController {
                 menuPersonController(loginInApp);
                 break;
             case 4:managerController.menuManagerController(loginInApp);
+            break;
+            case 5:administratorController.menuAdministratorController(loginInApp);
             break;
             case 0:
                 break;
@@ -84,6 +88,10 @@ public class PersonController {
         while (numberLogin < 3) {
             System.out.println("Введите логин пользователя (Enter username)");
             loginPerson = scanner.nextLine();
+            //TODo сделать минимальное значение по логину и паролю
+//            if (loginPerson.length(5)){
+//
+//            }
             //loginRegist = loginPerson;
             if (loginPerson.isEmpty()) {
                 System.out.println("Вы не ввели логин (You have not entered a login) " + (numberLogin + 1) + " раз (once)");

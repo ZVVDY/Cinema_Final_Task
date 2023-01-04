@@ -10,5 +10,5 @@ public interface PersonService {
     //void seachRole(String userName, String personPassword);
     String searchForAPersonInTheDatabase();
     void update(Person person);
-    void delete(Long id);
+    void delete();
 }

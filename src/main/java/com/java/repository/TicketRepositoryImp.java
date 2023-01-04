@@ -122,7 +122,7 @@ public class TicketRepositoryImp implements TicketRepository {
                 personController.menuPersonController(nameLogin);
             }
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("id_film") + " Film " + resultSet.getString("filmname") + " Place number: " +
+                System.out.println(resultSet.getString("id_film") + " Film/Event " + resultSet.getString("filmname") + " Place number: " +
                         resultSet.getString("numberplace") + " Ticket price: " +
                         resultSet.getString("costtiket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
             }
@@ -136,31 +136,33 @@ public class TicketRepositoryImp implements TicketRepository {
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            sql = "SELECT id, namemovie, dateandtimefilm, quantityticket FROM film";
+            sql = "SELECT id, namemovie, dateandtimefilm, quantityticket,cost_ticket FROM film";
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("id") + " Film " + resultSet.getString("namemovie") + " Date film: " + resultSet.getString("dateandtimefilm") + " Ticket price: " +
-                        resultSet.getString("quantityticket"));
+                System.out.println(resultSet.getString("id") + " Film/Event " + resultSet.getString("namemovie") + " Date film: " + resultSet.getString("dateandtimefilm") + " Ticket price: " +
+                        resultSet.getString("quantityticket")+ " Cost one ticket:" + resultSet.getString("cost_ticket"));
             }
-            System.out.println("Введите Id фильма для добавления билетов");
+            System.out.println("Введите id фильма для добавления билетов (Enter movie id to add tickets)");
             int scanId = scanner.nextInt();
-            sql = String.format("SELECT id, namemovie, dateandtimefilm, quantityticket FROM film WHERE id = %d", scanId);
+            sql = String.format("SELECT id, namemovie, dateandtimefilm, quantityticket, cost_ticket FROM film WHERE id = %d", scanId);
             ps = connect.prepareStatement(sql);
             resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                int s = 1;
+                int numberTicketCopyInBase = 1;
                 int id = Integer.parseInt(resultSet.getString("id"));
                 String nameFilm = resultSet.getString("namemovie");
                 int numberPlace = Integer.parseInt(resultSet.getString("quantityticket"));
-                while (s <= numberPlace) {
-                    sql = "INSERT INTO ticket (id_film, filmname, numberplace) VALUES (?,?,?)";
+                int costTicket= Integer.parseInt(resultSet.getString("cost_ticket"));
+                while (numberTicketCopyInBase <= numberPlace) {
+                    sql = "INSERT INTO ticket (id_film, filmname, numberplace, cost_ticket) VALUES (?,?,?,?)";
                     ps = connect.prepareStatement(sql);
                     ps.setInt(1, id);
                     ps.setString(2, nameFilm);
-                    ps.setInt(3, s);
+                    ps.setInt(3, numberTicketCopyInBase);
+                    ps.setInt(4, costTicket);
                     ps.execute();
-                    s++;
+                    numberTicketCopyInBase++;
                 }
             }
         } catch (SQLException e) {

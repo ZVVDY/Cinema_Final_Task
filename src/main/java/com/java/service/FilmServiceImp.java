@@ -12,7 +12,7 @@ public class FilmServiceImp implements FilmService {
 
     @Override
     public void editEventsAndMovies() {
-
+filmRepository.editEventsAndMovies();
     }
 
     @Override

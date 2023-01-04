@@ -20,8 +20,9 @@ public class ManagerController {
         System.out.println("2. Добавить фильмы/мероприятия (Add MoviesEvents");
         System.out.println("3. Добавить билеты в фильмы/мероприятия (Add Tickets to MoviesEvents)");
         System.out.println("4. Купить  билеты на фильмы/мероприятия для пользователя (Buy event movie tickets for a user) ");
-        System.out.println("5. Возвратить билеты на фильмы/мероприятия");
-        System.out.println("0. Выход");
+        System.out.println("5. Возвратить билеты на фильмы/мероприятия для пользователя (Refund event movie tickets for a user) ");
+        System.out.println("6. Редактировать фильмы/мероприятия  (Edit MoviesEvents) ");
+        System.out.println("0. Выход(Exit)");
         int number = scanner.nextInt();
         switch (number) {
             case 1:
@@ -36,12 +37,16 @@ public class ManagerController {
             case 4:
                 ticketService.buyAMovieTicket(personService.searchForAPersonInTheDatabase());
                 break;
-            case 5:ticketService.viewPurchasedMovieTickets(personService.searchForAPersonInTheDatabase());
-            break;
+            case 5:
+                ticketService.refundMovieTicket(personService.searchForAPersonInTheDatabase());
+                break;
+            case 6:
+                service.editEventsAndMovies();
+                break;
             case 0:
                 break;
             default:
-                System.out.println("Введите номер меню");
+                System.out.println("Введите номер меню (Enter menu number)");
                 break;
         }
 
