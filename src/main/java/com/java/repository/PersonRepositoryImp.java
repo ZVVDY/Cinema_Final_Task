@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.Scanner;
 
 public class PersonRepositoryImp implements PersonRepository {
     private static String driver = "com.mysql.jdbc.Driver";
@@ -17,8 +16,7 @@ public class PersonRepositoryImp implements PersonRepository {
     private Connection connect;
     private PreparedStatement ps;
     private String sql;
-
-    private Scanner scanner = new Scanner(System.in);
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     @Override
     public void createPerson(Person person) throws ClassNotFoundException {
@@ -130,8 +128,40 @@ public class PersonRepositoryImp implements PersonRepository {
 //}
 //}
     @Override
-    public void updatePerson(Person person) {
-
+    public void updatePerson() {
+        Person person = new Person();
+        try {
+            Class.forName(driver);
+            connect = DriverManager.getConnection(url, username, password);
+            System.out.println("Список  пользователей для редактирования (List of users to edit)");
+            sql = "SELECT * FROM `person` WHERE role_client = 'CLIENT_PERSON'";
+            ps = connect.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString("id") + " Person " + resultSet.getString("username") +
+                        " Password " +
+                        resultSet.getString("password"));
+            }
+            System.out.println("Введите id пользователя для редактирования (Enter event person id to edit)");
+            int scanId = Integer.parseInt(reader.readLine());
+            sql = String.format("SELECT id, username, password FROM person WHERE id = %d", scanId);
+            ps = connect.prepareStatement(sql);
+            resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                System.out.println("Введите новое имя пользователя (Enter a new name for the person)");
+                person.setLoginPerson(reader.readLine());
+                System.out.println("Введите  новый пароль пользователя (Enter a new user password)");
+                person.setPasswordPerson(reader.readLine());
+                sql = String.format(("UPDATE `person` SET `username`='%s', `password` ='%s' WHERE `id`=%d"),
+                        person.getLoginPerson(), person.getPasswordPerson(), scanId);
+                ps = connect.prepareStatement(sql);
+                ps.execute();
+                System.out.println("Изменения внесены успешно пользователь с новым именем(Changes made successfully) "
+                        + person.getLoginPerson());
+            }
+        } catch (SQLException | ClassNotFoundException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -148,7 +178,7 @@ public class PersonRepositoryImp implements PersonRepository {
                 System.out.println("id" + resultSet.getString("id") + " username " + resultSet.getString("username"));
             }
             System.out.println("Введите id пользователя (Enter user id)");
-            int idPerson = scanner.nextInt();
+            int idPerson = Integer.parseInt(reader.readLine());
             System.out.println("Введите username пользователя(Enter the username of the user)");
             String namePerson = reader.readLine();
             sql = String.format("SELECT EXISTS (SELECT * FROM person WHERE id = %d AND username = '%s')",
@@ -165,20 +195,15 @@ public class PersonRepositoryImp implements PersonRepository {
                             " выполнено (performed)");
                     System.out.println("Происходит очистка билетов занятых пользователем " +
                             "(Tickets occupied by the user are cleared)" + namePerson);
-                    sql = String.format("SELECT * FROM `ticket` WHERE `username`='%s'", namePerson);
+                    sql = String.format(("UPDATE `ticket` SET `username`=NULL, `flagTicketPurchased` =0 WHERE " +
+                            "`username`='%s'"), namePerson);
                     ps = connect.prepareStatement(sql);
-                    ResultSet resultSetTwo = ps.executeQuery();
-
-                    while (resultSetTwo.next()) {
-                        sql = String.format(("UPDATE `ticket` SET `username`=NULL, `flagTicketPurchased` =0 WHERE " +
-                                "`username`='%s'"), namePerson);
-                        ps = connect.prepareStatement(sql);
-                        ps.execute();
-                        System.out.println("Возрат билета выполнен (Ticket refund completed)");
-                    }
+                    ps.execute();
+                    System.out.println("Возрат билета выполнен (Ticket refund completed)");
                 }
+
                 if (count == 0) {
-                    System.err.println("Ошибка удаления пользователя(Error deleting user) " + idPerson);
+                    System.err.println("Ошибка удаления пользователя(Error deleting user) " + namePerson);
                 }
             }
 
@@ -202,11 +227,11 @@ public class PersonRepositoryImp implements PersonRepository {
                 System.out.println("id" + resultSet.getString("id") + " username " + resultSet.getString("username"));
             }
             System.out.println("Введите и выберите пользователя");
-            String nameLogin = scanner.nextLine();
+            String nameLogin = reader.readLine();
 
             return nameLogin;
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }

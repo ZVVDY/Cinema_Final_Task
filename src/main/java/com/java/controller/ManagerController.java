@@ -35,7 +35,7 @@ public class ManagerController {
                 ticketService.createTicket();
                 break;
             case 4:
-                ticketService.buyAMovieTicket(personService.searchForAPersonInTheDatabase());
+                ticketService.buyAMovieTicket();
                 break;
             case 5:
                 ticketService.refundMovieTicket(personService.searchForAPersonInTheDatabase());

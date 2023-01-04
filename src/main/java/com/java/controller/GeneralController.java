@@ -7,11 +7,9 @@ import com.java.service.PersonServiceImp;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 public class GeneralController {
-    private Scanner scanner = new Scanner(System.in);
-    private Scanner scannerTwo = new Scanner(System.in);
+
     private PersonService service = new PersonServiceImp();
     private PersonRepository personRepository = new PersonRepositoryImp();
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

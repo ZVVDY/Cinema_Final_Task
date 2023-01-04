@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.Scanner;
 
 public class FilmRepositoryImp implements FilmRepository {
     private static String driver = "com.mysql.jdbc.Driver";
@@ -18,10 +17,10 @@ public class FilmRepositoryImp implements FilmRepository {
     private Connection connect;
     private PreparedStatement ps;
     private String sql;
-    private Scanner scanner = new Scanner(System.in);
-    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    private TicketRepository ticketRepository = new TicketRepositoryImp();
-    private TicketService service = new TicketServiceImp();
+
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    public TicketService ticketService = new TicketServiceImp();
 
     @Override
     public void viewEventsAndMovies(String loginApp) {
@@ -37,19 +36,17 @@ public class FilmRepositoryImp implements FilmRepository {
                         resultSet.getInt("quantityticket"));
             }
             System.out.println("Введите номер фильма для покупки билета(Enter movie number to buy ticket)");
-            switch (scanner.nextInt()) {
-                case 1:
-                    service.buyAMovieTicket(loginApp);
-
-                    break;
-                case 0:
-                    break;
+            int idFilm = Integer.parseInt(reader.readLine());
+//            if (idFilm==0){
+//
+//            }
+            if (idFilm != 0) {
+                ticketService.buyAMovieTicket(loginApp, idFilm);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
 
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -73,7 +70,7 @@ public class FilmRepositoryImp implements FilmRepository {
             }
 
             System.out.println("Введите id фильма/мероприятия  для редактирования (Enter event movie id to edit)");
-            int scanId = scanner.nextInt();
+            int scanId = Integer.parseInt(reader.readLine());
             sql = String.format("SELECT id, namemovie, dateandtimefilm, quantityticket, cost_ticket FROM film WHERE id = %d", scanId);
             ps = connect.prepareStatement(sql);
             resultSet = ps.executeQuery();
@@ -85,10 +82,10 @@ public class FilmRepositoryImp implements FilmRepository {
                 String dateInString = reader.readLine();
                 film.setDateAndTimeFilm(dateInString);
                 System.out.println("Введите  новое количество мест (максимум 50), мероприятия /фильм (Enter the new number of seats (maximum 50), events movie)");
-                film.setQuantityTicket(scanner.nextInt());
+                film.setQuantityTicket(Integer.parseInt(reader.readLine()));
                 System.out.println("Введите  новую стоимость билета на мероприятия /фильм (Enter the new ticket price for events movie)");
-                film.setCostTicket(scanner.nextInt());
-                sql = String.format(("UPDATE `film` SET `namemovie`='%s', `dateandtimefilm` ='%s',`quantityticket`=%d,`cost_ticket`=%d WHERE `id`=%d"), film.getNameMovie(), film.getDateAndTimeFilm(), film.getQuantityTicket(),film.getCostTicket(),scanId);
+                film.setCostTicket(Integer.parseInt(reader.readLine()));
+                sql = String.format(("UPDATE `film` SET `namemovie`='%s', `dateandtimefilm` ='%s',`quantityticket`=%d,`cost_ticket`=%d WHERE `id`=%d"), film.getNameMovie(), film.getDateAndTimeFilm(), film.getQuantityTicket(), film.getCostTicket(), scanId);
                 ps = connect.prepareStatement(sql);
                 ps.execute();
                 System.out.println("Изменения внесены успешно(Changes made successfully)");
@@ -114,14 +111,13 @@ public class FilmRepositoryImp implements FilmRepository {
             String dateInString = readerTwo.readLine();
             film.setDateAndTimeFilm(dateInString);
             System.out.println("Введите  количество мест (максимум 50), мероприятия /фильм (Enter the number of seats (maximum 50), events movie)");
-            film.setQuantityTicket(scanner.nextInt());
+            film.setQuantityTicket(Integer.parseInt(reader.readLine()));
             System.out.println("Введите  стоимость билета на мероприятия /фильм (Enter the ticket price for events movie)");
-            film.setCostTicket(scanner.nextInt());
+            film.setCostTicket(Integer.parseInt(reader.readLine()));
             sql = String.format("INSERT INTO film(namemovie, dateandtimefilm, quantityticket,cost_ticket) VALUES ('%s','%s',%d,%d)", film.getNameMovie(), film.getDateAndTimeFilm(),
                     film.getQuantityTicket(), film.getCostTicket());
             ps = connect.prepareStatement(sql);
             ps.execute();
-//TODO хочу создавать билеты, добавить метод
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
@@ -131,9 +127,50 @@ public class FilmRepositoryImp implements FilmRepository {
         }
     }
 
-
     @Override
     public void deleteEventsAndMovies() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            Class.forName(driver);
+            connect = DriverManager.getConnection(url, username, password);
+            System.out.println("Список фильмов/мероприятий (List of film events)");
+            sql = "SELECT * FROM `film` ";
+            ps = connect.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                System.out.println("id" + resultSet.getString("id") + " namemovie " + resultSet.getString("namemovie"));
+            }
+            System.out.println("Введите id фильма/мероприятия (Enter event movie id)");
+            int idFilm = Integer.parseInt(reader.readLine());
+            System.out.println("Введите название фильма/мероприятия(Enter the namemovie movieevent)");
+            String nameFilm = reader.readLine();
+            sql = String.format("SELECT EXISTS (SELECT * FROM film WHERE id = %d AND namemovie = '%s')",
+                    idFilm, nameFilm);
+            ps = connect.prepareStatement(sql);
+            resultSet = ps.executeQuery(sql);
+            while (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                if (count == 1) {
+                    sql = String.format("DELETE FROM `film` WHERE `id`= %d ", idFilm);
+                    ps = connect.prepareStatement(sql);
+                    ps.executeUpdate();
+                    System.out.println("Удаление фильма/мероприятия(Delete movie event) " + nameFilm +
+                            " выполнено (performed)");
+                    System.out.println("Происходит очистка билетов фильма/мероприятия " +
+                            "(Tickets occupied by the user are cleared)" + nameFilm);
+                    sql = String.format(("DELETE FROM `ticket` WHERE `id_film`= %d "), idFilm);
+                    ps = connect.prepareStatement(sql);
+                    ps.execute();
+                    System.out.println("Удаление билетов и базы  выполнено (Deletion of tickets and database completed)");
 
+                }
+                if (count == 0) {
+                    System.err.println("Ошибка удаления пользователя(Error deleting user) " + idFilm);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
+

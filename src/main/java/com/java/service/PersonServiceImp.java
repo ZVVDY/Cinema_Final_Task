@@ -1,7 +1,6 @@
 package com.java.service;
 
 import com.java.model.Person;
-import com.java.model.RoleClient;
 import com.java.repository.PersonRepository;
 import com.java.repository.PersonRepositoryImp;
 
@@ -11,7 +10,7 @@ public class PersonServiceImp implements PersonService {
 
     @Override
     public void create(Person person) throws ClassNotFoundException {
-personRepository.createPerson(person);
+        personRepository.createPerson(person);
     }
 
     @Override
@@ -20,7 +19,7 @@ personRepository.createPerson(person);
     }
 
     public boolean readPasswordAddLog(String logName, String passwordLog) {
-        return personRepository.searchForARegisteredPersonPassword(logName,passwordLog);
+        return personRepository.searchForARegisteredPersonPassword(logName, passwordLog);
     }
 
     @Override
@@ -34,12 +33,12 @@ personRepository.createPerson(person);
 //    }
 
     @Override
-    public void update(Person person) {
-
+    public void update() {
+        personRepository.updatePerson();
     }
 
     @Override
     public void delete() {
-personRepository.deletePerson();
+        personRepository.deletePerson();
     }
 }

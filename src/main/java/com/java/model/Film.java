@@ -1,7 +1,5 @@
 package com.java.model;
 
-import java.util.Date;
-
 public class Film {
     private int idMovie;
     private String nameMovie;
@@ -49,7 +47,7 @@ public class Film {
         this.costTicket = costTicket;
     }
 
-    public Film(){
+    public Film() {
 
     }
 

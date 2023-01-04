@@ -4,16 +4,21 @@ import com.java.repository.TicketRepository;
 import com.java.repository.TicketRepositoryImp;
 
 public class TicketServiceImp implements TicketService {
-    private TicketRepository repository = new TicketRepositoryImp();
 
+    public TicketRepository repository = new TicketRepositoryImp();
 
     @Override
 
-    public void buyAMovieTicket(String loginApp) {
-        repository.buyAMovieTicketPerson(loginApp);
+    public void buyAMovieTicket(String loginApp, int idFilm) {
+
+        repository.buyAMovieTicketPerson(loginApp, idFilm);
         System.out.println("Покупка билета выполнена");
+    }
 
+    @Override
+    public void buyAMovieTicket() {
 
+        repository.buyAMovieTicketPerson();
     }
 
     @Override

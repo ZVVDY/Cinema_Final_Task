@@ -1,34 +1,34 @@
 package com.java.controller;
 
 import com.java.model.Person;
-import com.java.model.RoleClient;
 import com.java.service.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
-import java.util.Scanner;
 
 @Slf4j
 public class PersonController {
     private PersonService personService = new PersonServiceImp();
     private TicketService ticketService = new TicketServiceImp();
     private FilmService filmService = new FilmServiceImp();
-    private Scanner scanner = new Scanner(System.in);
-    private Scanner scannerTwo = new Scanner(System.in);
+    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private Date date = new Date();
     private ManagerController managerController = new ManagerController();
-    private  AdministratorController administratorController = new AdministratorController();
+    private AdministratorController administratorController = new AdministratorController();
 
-    public void menuPersonController(String loginInApp) throws ClassNotFoundException {
+    public void menuPersonController(String loginInApp) throws ClassNotFoundException, IOException {
         System.out.println("Вы вошли в приложение, используя логин: (You are logged into the app using: )" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);//дата входа
-        System.out.println("1. Просмотреть доступные для покупки фильмы/мероприятия(View events available for purchase of the film)");
+        System.out.println("1. Покупка билетов на фильмы/мероприятия(Purchasing tickets for films)");
         System.out.println("2. Просмотреть фильмы/мероприятия (Watch  Movies and Events) ");
         System.out.println("3. Посмотреть купленные фильмы/мероприятия (View purchased films of the event)");
         System.out.println("4. Вход менеджера");
         System.out.println("5. Вход админа");
         System.out.println("0. Выход (Exit)");
-        int number = scannerTwo.nextInt();
+        int number = Integer.parseInt(reader.readLine());
         switch (number) {
             case 1:
                 filmService.viewEventsAndMovies(loginInApp);
@@ -42,10 +42,12 @@ public class PersonController {
                 ticketService.refundMovieTicket(loginInApp);
                 menuPersonController(loginInApp);
                 break;
-            case 4:managerController.menuManagerController(loginInApp);
-            break;
-            case 5:administratorController.menuAdministratorController(loginInApp);
-            break;
+            case 4:
+                managerController.menuManagerController(loginInApp);
+                break;
+            case 5:
+                administratorController.menuAdministratorController(loginInApp);
+                break;
             case 0:
                 break;
             default:
@@ -55,15 +57,15 @@ public class PersonController {
 
     }
 
-    protected void logInToTheAppCinema() throws ClassNotFoundException {
+    protected void logInToTheAppCinema() throws ClassNotFoundException, IOException {
 
         GeneralController generalController = new GeneralController();
         System.out.println("Вход в приложение (Application Login)");
         System.out.println("Введите логин пользователя (Enter username)");
-        String loginPersonRead = scanner.nextLine();
+        String loginPersonRead = reader.readLine();
         if (personService.readLogin(loginPersonRead)) {
             System.out.println("Введите пароль пользователя (Enter user password)");
-            String passwordPersonRead = scanner.nextLine();
+            String passwordPersonRead = reader.readLine();
             boolean toLogAndPasswordRegist = personService.readPasswordAddLog(loginPersonRead, passwordPersonRead);
             //personService.seachRole(loginPersonRead,passwordPersonRead);
             if (toLogAndPasswordRegist) {
@@ -78,7 +80,7 @@ public class PersonController {
         }
     }
 
-    protected void registrationPersonInTheAppCinema() throws ClassNotFoundException {
+    protected void registrationPersonInTheAppCinema() throws ClassNotFoundException, IOException {
         String loginPerson;
         String passwordPerson;
         GeneralController generalController = new GeneralController();
@@ -87,7 +89,7 @@ public class PersonController {
         int numberPassword = 0;
         while (numberLogin < 3) {
             System.out.println("Введите логин пользователя (Enter username)");
-            loginPerson = scanner.nextLine();
+            loginPerson = reader.readLine();
             //TODo сделать минимальное значение по логину и паролю
 //            if (loginPerson.length(5)){
 //
@@ -114,7 +116,7 @@ public class PersonController {
         }
         while (numberPassword < 3) {
             System.out.println("Введите пароль пользователя (Enter user password)");
-            passwordPerson = scanner.nextLine();
+            passwordPerson = reader.readLine();
             if (passwordPerson.isEmpty()) {
                 System.err.println("Вы не ввели пароль (You have not entered a password )" + (numberPassword + 1) + "раз (once)");
                 numberPassword++;
@@ -125,8 +127,6 @@ public class PersonController {
                 System.out.println("Вы успешно зарегистрированы (You have successfully registered)");
                 log.info("Успешная зарегистрация под логином " + person.getLoginPerson());
                 generalController.menuCinema();
-                scanner.remove();
-                scannerTwo.remove();
             }
             if (numberPassword == 3) {
                 System.err.println("Колличество попыток ввода пароля закончилось пройдите регистрацию заново (The number of password attempts has expired, please register again)");

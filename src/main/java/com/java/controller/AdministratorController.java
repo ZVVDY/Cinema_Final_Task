@@ -2,6 +2,7 @@ package com.java.controller;
 
 import com.java.service.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ public class AdministratorController {
 
     private Date date = new Date();
 
-    protected void menuAdministratorController(String loginInApp) throws ClassNotFoundException {
+    protected void menuAdministratorController(String loginInApp) throws ClassNotFoundException, IOException {
         System.out.println("Вы вошли в приложение под логином: (You are logged into the app using:)" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);
         System.out.println("1. Просмотреть доступные фильмы/мероприятия(View available films of the event");
@@ -39,7 +40,7 @@ public class AdministratorController {
                 ticketService.createTicket();
                 break;
             case 4:
-                ticketService.buyAMovieTicket(personService.searchForAPersonInTheDatabase());
+                ticketService.buyAMovieTicket();
                 break;
             case 5:
                 ticketService.refundMovieTicket(personService.searchForAPersonInTheDatabase());
@@ -47,15 +48,19 @@ public class AdministratorController {
             case 6:
                 service.editEventsAndMovies();
                 break;
-            case 7://удаление мероприятия
+            case 7:
+                service.deleteEventsAndMovies();//удаление мероприятия
                 break;
-            case 8:PersonController controller = new PersonController();
+            case 8:
+                PersonController controller = new PersonController();
                 controller.registrationPersonInTheAppCinema();
-            menuAdministratorController(loginInApp);
+                menuAdministratorController(loginInApp);
                 break;
-            case 9:personService.delete();//удаление пользователя
+            case 9:
+                personService.delete();//удаление пользователя
                 break;
-            case 10://изменение пользователя
+            case 10:
+                personService.update();//изменение пользователя
                 break;
             case 0:
                 break;
