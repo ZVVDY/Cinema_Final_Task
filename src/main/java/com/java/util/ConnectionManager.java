@@ -14,7 +14,6 @@ public class ConnectionManager {
     private static String password = "";
     private static Connection connect;
 
-
     public void connectionBase() throws ClassNotFoundException {
         try {
             Class.forName(driver);

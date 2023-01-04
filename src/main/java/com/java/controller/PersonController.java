@@ -1,6 +1,7 @@
 package com.java.controller;
 
 import com.java.model.Person;
+import com.java.model.RoleClient;
 import com.java.service.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,8 +26,6 @@ public class PersonController {
         System.out.println("1. Покупка билетов на фильмы/мероприятия(Purchasing tickets for films)");
         System.out.println("2. Просмотреть фильмы/мероприятия (Watch  Movies and Events) ");
         System.out.println("3. Посмотреть купленные фильмы/мероприятия (View purchased films of the event)");
-        System.out.println("4. Вход менеджера");
-        System.out.println("5. Вход админа");
         System.out.println("0. Выход (Exit)");
         int number = Integer.parseInt(reader.readLine());
         switch (number) {
@@ -41,12 +40,6 @@ public class PersonController {
             case 3:
                 ticketService.refundMovieTicket(loginInApp);
                 menuPersonController(loginInApp);
-                break;
-            case 4:
-                managerController.menuManagerController(loginInApp);
-                break;
-            case 5:
-                administratorController.menuAdministratorController(loginInApp);
                 break;
             case 0:
                 break;
@@ -67,9 +60,24 @@ public class PersonController {
             System.out.println("Введите пароль пользователя (Enter user password)");
             String passwordPersonRead = reader.readLine();
             boolean toLogAndPasswordRegist = personService.readPasswordAddLog(loginPersonRead, passwordPersonRead);
-            //personService.seachRole(loginPersonRead,passwordPersonRead);
+            String personRole = personService.seachRole(loginPersonRead, passwordPersonRead);
+            RoleClient roleClient = RoleClient.valueOf(personRole);
             if (toLogAndPasswordRegist) {
-                menuPersonController(loginPersonRead);
+                switch (roleClient) {
+                    case ADMIN: {
+                        administratorController.menuAdministratorController(loginPersonRead);
+                        break;
+                    }
+                    case MANAGER: {
+                        managerController.menuManagerController(loginPersonRead);
+                        break;
+                    }
+                    case CLIENT_PERSON: {
+                        menuPersonController(loginPersonRead);
+                        break;
+                    }
+
+                }
             }
             if (!toLogAndPasswordRegist) {
                 logInToTheAppCinema();
@@ -91,6 +99,7 @@ public class PersonController {
             System.out.println("Введите логин пользователя (Enter username)");
             loginPerson = reader.readLine();
             //TODo сделать минимальное значение по логину и паролю
+
 //            if (loginPerson.length(5)){
 //
 //            }

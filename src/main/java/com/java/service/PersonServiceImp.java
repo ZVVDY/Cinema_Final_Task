@@ -27,10 +27,10 @@ public class PersonServiceImp implements PersonService {
         return personRepository.searchForAPersonInTheDatabase();
     }
 
-//    @Override
-//    public void seachRole(String userName, String personPassword) {
-//        personRepository.seachRole(userName,personPassword);
-//    }
+    @Override
+    public String seachRole(String userName, String personPassword) {
+        return personRepository.seachRole(userName,personPassword);
+    }
 
     @Override
     public void update() {

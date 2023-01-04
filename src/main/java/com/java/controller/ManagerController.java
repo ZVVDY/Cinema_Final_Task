@@ -2,18 +2,20 @@ package com.java.controller;
 
 import com.java.service.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
-import java.util.Scanner;
 
 public class ManagerController {
-    Scanner scanner = new Scanner(System.in);
+    private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private FilmService service = new FilmServiceImp();
     private TicketService ticketService = new TicketServiceImp();
     private PersonService personService = new PersonServiceImp();
 
     private Date date = new Date();
 
-    protected void menuManagerController(String loginInApp) {
+    protected void menuManagerController(String loginInApp) throws IOException {
         System.out.println("Вы вошли в приложение под логином: (You are logged into the app using:)" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);
         System.out.println("1. Просмотреть доступные фильмы/мероприятия(View available films of the event");
@@ -23,7 +25,7 @@ public class ManagerController {
         System.out.println("5. Возвратить билеты на фильмы/мероприятия для пользователя (Refund event movie tickets for a user) ");
         System.out.println("6. Редактировать фильмы/мероприятия  (Edit MoviesEvents) ");
         System.out.println("0. Выход(Exit)");
-        int number = scanner.nextInt();
+        int number = Integer.parseInt(reader.readLine());
         switch (number) {
             case 1:
                 service.viewEventsAndMovies(loginInApp);

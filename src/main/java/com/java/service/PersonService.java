@@ -9,7 +9,7 @@ public interface PersonService {
 
     boolean readPasswordAddLog(String logName, String passwordLog);
 
-    //void seachRole(String userName, String personPassword);
+    String seachRole(String userName, String personPassword);
     String searchForAPersonInTheDatabase();
 
     void update();
