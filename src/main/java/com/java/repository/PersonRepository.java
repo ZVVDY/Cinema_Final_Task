@@ -17,6 +17,6 @@ public interface PersonRepository {
 
     String searchForAPersonInTheDatabase();
 
-    void createPerson();
+    Person createPerson();
 
 }

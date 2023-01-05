@@ -17,5 +17,5 @@ public interface PersonService {
 
     void delete();
 
-    void createPerson();
+    Person createPerson();
 }

@@ -61,7 +61,7 @@ public class AdministratorController {
                 menuAdministratorController(loginInApp);
                 break;
             case 8:
-                personService.createPerson();
+                personService.create(personService.createPerson());
                 menuAdministratorController(loginInApp);
                 break;
             case 9:

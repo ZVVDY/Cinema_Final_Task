@@ -1,5 +1,6 @@
 package com.java.repository;
 
+import com.java.controller.GeneralController;
 import com.java.controller.PersonController;
 import com.java.model.Person;
 import com.java.model.RoleClient;
@@ -32,10 +33,11 @@ public class PersonRepositoryImp implements PersonRepository {
             ps.setString(2, person.getPasswordPerson());
             ps.setString(3, String.valueOf(RoleClient.CLIENT_PERSON));
             ps.execute();
+            log.info("Пользователь " + person.getLoginPerson() + " создан в базе данных");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
-
+            log.error("No connection MySQL");
         }
     }
 
@@ -143,8 +145,8 @@ public class PersonRepositoryImp implements PersonRepository {
                         person.getLoginPerson(), person.getPasswordPerson(), scanId);
                 ps = connect.prepareStatement(sql);
                 ps.execute();
-                System.out.println("Изменения внесены успешно, пользователь с новым именем(Changes made successfully) "
-                        + person.getLoginPerson());
+                System.out.println("Изменения внесены успешно, пользователь с новым именем" +
+                        "(Changes made successfully) " + person.getLoginPerson());
                 log.info("Изменения внесены успешно, пользователь с новым именем(Changes made successfully) "
                         + person.getLoginPerson());
             }
@@ -228,13 +230,18 @@ public class PersonRepositoryImp implements PersonRepository {
     }
 
     @Override
-    public void createPerson() {
+    public Person createPerson() {
         log.info("Пользователь  вошел в меню,создания пользователей ");
-        PersonController controller = new PersonController();
+        Person person = new Person();
+        System.out.println("Введите имя пользователя(Enter username)");
         try {
-            controller.registrationPersonInTheAppCinema();
-        } catch (ClassNotFoundException | IOException e) {
+            person.setLoginPerson(reader.readLine());
+            System.out.println("Введите пароль пользователя(Enter password)");
+            person.setPasswordPerson(reader.readLine());
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return person;
     }
 }

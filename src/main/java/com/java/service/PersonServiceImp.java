@@ -45,7 +45,7 @@ public class PersonServiceImp implements PersonService {
     }
 
     @Override
-    public void createPerson() {
-        personRepository.createPerson();
+    public Person createPerson() {
+       return personRepository.createPerson();
     }
 }
