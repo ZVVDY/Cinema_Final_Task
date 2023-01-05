@@ -7,6 +7,7 @@ public class Ticket {
     private Integer numberPlacel;
     private Integer costTicket;
     private boolean flagTicketPurchased;
+
     public Long getIdTicket() {
         return idTicket;
     }
@@ -56,7 +57,6 @@ public class Ticket {
     }
 
 
-
     public Ticket(Long idTicket, String personTicket, String personFilmTicket, Integer numberPlacel,
                   Integer costTicket, boolean flagTicketPurchased) {
         this.idTicket = idTicket;
@@ -66,7 +66,8 @@ public class Ticket {
         this.costTicket = costTicket;
         this.flagTicketPurchased = flagTicketPurchased;
     }
-    public Ticket(){
+
+    public Ticket() {
 
     }
 }

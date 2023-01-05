@@ -13,16 +13,25 @@ public class FilmServiceImp implements FilmService {
 
     @Override
     public void editEventsAndMovies() {
+
         filmRepository.editEventsAndMovies();
     }
 
     @Override
     public void createEventsAndMovies() {
+
         filmRepository.createEventsAndMovies();
     }
 
     @Override
+    public void watchMoviesEventsAtTheCinema(String loginApp) {
+
+        filmRepository.watchMoviesEventsAtTheCinema(loginApp);
+    }
+
+    @Override
     public void deleteEventsAndMovies() {
+
         filmRepository.deleteEventsAndMovies();
     }
 }

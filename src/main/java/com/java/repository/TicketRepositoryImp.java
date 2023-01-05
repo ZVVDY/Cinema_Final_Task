@@ -6,12 +6,14 @@ import com.java.service.FilmService;
 import com.java.service.FilmServiceImp;
 import com.java.service.PersonService;
 import com.java.service.PersonServiceImp;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 
+@Slf4j
 public class TicketRepositoryImp implements TicketRepository {
     private static String driver = "com.mysql.jdbc.Driver";
     private static String url = "jdbc:mysql://127.0.0.1:3307/cinema";
@@ -26,6 +28,7 @@ public class TicketRepositoryImp implements TicketRepository {
 
     @Override
     public void buyAMovieTicketPerson(String loginApp, int idFilm) {
+        log.info("Пользователь " + loginApp + " вошел в меню покупки билетов ");
         Ticket ticket = new Ticket();
         try {
             Class.forName(driver);
@@ -41,29 +44,21 @@ public class TicketRepositoryImp implements TicketRepository {
             }
             System.out.println("Введите номер места для покупки билета (Enter seat number for ticket purchase)");
             Integer scannerBayTiketPlace = Integer.parseInt(reader.readLine());
-//            ticket.setIdTicket(1L);
-//            ticket.setPersonTicket(loginApp);
-//            ticket.setNumberPlacel(scannerBayTiketPlace);
+            log.info("Выбрано место " + scannerBayTiketPlace);
             ticket.setFlagTicketPurchased(true);
-
             sql = String.format(("UPDATE `ticket` SET `username`='%s', `flagTicketPurchased` =%b WHERE `numberplace`=%d"), loginApp, ticket.getFlagTicketPurchased(), scannerBayTiketPlace);
-
             ps = connect.prepareStatement(sql);
-
             ps.execute();
-
-//            while (a=false) {
-//                System.out.println("Билет куплен, номер места " + ticket.getNumberPlacel());
-//
-//            }
-
+            log.info("Пользователь совершил покупку на мероприятие/фильм ");
         } catch (SQLException | ClassNotFoundException | IOException e) {
+            log.error("Ошибка в покупке билета");
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void buyAMovieTicketPerson() {
+        log.info("Пользователь открыл  меню покупки билетов на мероприятие/фильм ");
         FilmService filmService = new FilmServiceImp();
         String namePerson = personService.searchForAPersonInTheDatabase();
         filmService.viewEventsAndMovies(namePerson);
@@ -72,6 +67,7 @@ public class TicketRepositoryImp implements TicketRepository {
 
     @Override
     public void refundMovieTicketPerson(String personName) {
+        log.info("Пользователь " + personName + " открыл меню возврата билета ");
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
@@ -79,36 +75,28 @@ public class TicketRepositoryImp implements TicketRepository {
             sql = String.format("SELECT * FROM `ticket` WHERE `username`='%s'", personName);
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
-            //if (resultSet.next()) {
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("id_film") + " Film " + resultSet.getString("filmname") + " Place number: " +
                         resultSet.getString("numberplace") + " Ticket price: " +
                         resultSet.getString("cost_ticket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
             }
-            System.out.println("Введите номер места для возврата билета( Enter seat number for ticket refund)");//
+            System.out.println("Введите номер места для возврата билета( Enter seat number for ticket refund)");
             Integer scannerBayTiketPlace = Integer.parseInt(reader.readLine());
-//            ticket.setIdTicket(1L);
-//            ticket.setPersonTicket(loginApp);
-//            ticket.setNumberPlacel(scannerBayTiketPlace);
-            //ticket.setFlagTicketPurchased(true);
-
             sql = String.format(("UPDATE `ticket` SET `username`=NULL, `flagTicketPurchased` =0 WHERE `numberplace`=%d"), scannerBayTiketPlace);
-
             ps = connect.prepareStatement(sql);
-
             ps.execute();
             System.out.println("Возрат билета выполнен (Ticket refund completed)");
-            // refundMovieTicketPerson(personName);
-
+            log.info("Пользователь " + personName + " вернул билет" + scannerBayTiketPlace + " на фильм/мероприятие ");
             if (!resultSet.next()) {
                 System.out.println(" У вас нет купленных билетов (You have no purchased tickets)");
                 System.out.println("Введите 0 ,что бы вернуться в предыдущее меню (Enter 0 to return to the previous menu)");
-                int numberBack = Integer.parseInt(reader.readLine());
-                if (numberBack == 0) {
-                    PersonController personController = new PersonController();
-                    personController.menuPersonController(personName);
-                }
+                //int numberBack = Integer.parseInt(reader.readLine());
+//                if (numberBack == 0) {
+//                    PersonController personController = new PersonController();
+//                    personController.menuPersonController(personName);
+//                }
             }
+
 
         } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
@@ -117,10 +105,11 @@ public class TicketRepositoryImp implements TicketRepository {
 
     @Override
     public void viewPurchasedMovieTicketsPerson(String nameLogin) {
+        log.info("Пользователь " + nameLogin + " открыл список фильмов мероприятий для просмотра");
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            System.out.println("Список купленных билетов (List of purchased tickets)");
+            System.out.println("Список фильмов мероприятий для просмотра (List of events films to watch)");
             sql = String.format("SELECT * FROM `ticket` WHERE `username`='%s'", nameLogin);
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
@@ -135,13 +124,13 @@ public class TicketRepositoryImp implements TicketRepository {
                         resultSet.getString("numberplace") + " Ticket price: " +
                         resultSet.getString("cost_ticket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
             }
-
         } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void createTicket() {
+        log.info("Пользователь открыл  меню создания билетов");
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
@@ -173,10 +162,13 @@ public class TicketRepositoryImp implements TicketRepository {
                     ps.execute();
                     numberTicketCopyInBase++;
                 }
+                log.info("Создано " + numberPlace + " на мероприятия/фильм" + nameFilm);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("No connection MySQL");
+            log.error(" Ошибка подключения к базе данных");
 
         } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);

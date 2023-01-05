@@ -10,9 +10,12 @@ public interface PersonService {
     boolean readPasswordAddLog(String logName, String passwordLog);
 
     String seachRole(String userName, String personPassword);
+
     String searchForAPersonInTheDatabase();
 
     void update();
 
     void delete();
+
+    void createPerson();
 }

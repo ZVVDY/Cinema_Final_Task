@@ -1,22 +1,24 @@
 package com.java.controller;
 
 import com.java.service.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
+@Slf4j
 public class AdministratorController {
     Scanner scanner = new Scanner(System.in);
-    private FilmService service = new FilmServiceImp();
+    private FilmService filmService = new FilmServiceImp();
     private TicketService ticketService = new TicketServiceImp();
     private PersonService personService = new PersonServiceImp();
-
     private Date date = new Date();
 
     protected void menuAdministratorController(String loginInApp) throws ClassNotFoundException, IOException {
         System.out.println("Вы вошли в приложение под логином: (You are logged into the app using:)" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);
+        log.info("Пользователь " + loginInApp + " меню администратора,дата и время входа " + date);
         System.out.println("1. Просмотреть доступные фильмы/мероприятия(View available films of the event");
         System.out.println("2. Добавить фильмы/мероприятия (Add MoviesEvents");
         System.out.println("3. Добавить билеты в фильмы/мероприятия (Add Tickets to MoviesEvents)");
@@ -31,38 +33,47 @@ public class AdministratorController {
         int number = scanner.nextInt();
         switch (number) {
             case 1:
-                service.viewEventsAndMovies(loginInApp);
+                filmService.viewEventsAndMovies(loginInApp);
+                menuAdministratorController(loginInApp);
                 break;
             case 2:
-                service.createEventsAndMovies();
+                filmService.createEventsAndMovies();
+                menuAdministratorController(loginInApp);
                 break;
             case 3:
                 ticketService.createTicket();
+                menuAdministratorController(loginInApp);
                 break;
             case 4:
                 ticketService.buyAMovieTicket();
+                menuAdministratorController(loginInApp);
                 break;
             case 5:
                 ticketService.refundMovieTicket(personService.searchForAPersonInTheDatabase());
+                menuAdministratorController(loginInApp);
                 break;
             case 6:
-                service.editEventsAndMovies();
+                filmService.editEventsAndMovies();
+                menuAdministratorController(loginInApp);
                 break;
             case 7:
-                service.deleteEventsAndMovies();//удаление мероприятия
+                filmService.deleteEventsAndMovies();
+                menuAdministratorController(loginInApp);
                 break;
             case 8:
-                PersonController controller = new PersonController();
-                controller.registrationPersonInTheAppCinema();
+                personService.createPerson();
                 menuAdministratorController(loginInApp);
                 break;
             case 9:
-                personService.delete();//удаление пользователя
+                personService.delete();
+                menuAdministratorController(loginInApp);
                 break;
             case 10:
-                personService.update();//изменение пользователя
+                personService.update();
+                menuAdministratorController(loginInApp);
                 break;
             case 0:
+                log.info("Пользователь вышел из програмы");
                 break;
             default:
                 System.out.println("Введите номер меню (Enter menu number)");

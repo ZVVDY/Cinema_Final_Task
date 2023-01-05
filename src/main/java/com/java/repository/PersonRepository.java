@@ -10,10 +10,13 @@ public interface PersonRepository {
     boolean searchForARegisteredPersonPassword(String userName, String personPassword);
 
     String seachRole(String userName, String personPassword);
+
     void updatePerson();
 
     void deletePerson();
 
     String searchForAPersonInTheDatabase();
+
+    void createPerson();
 
 }

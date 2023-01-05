@@ -22,10 +22,12 @@ public class PersonController {
 
     public void menuPersonController(String loginInApp) throws ClassNotFoundException, IOException {
         System.out.println("Вы вошли в приложение, используя логин: (You are logged into the app using: )" + loginInApp);
-        System.out.println("Дата входа (Release date) " + date);//дата входа
+        System.out.println("Дата входа (Release date) " + date);
+        log.info("Пользователь " + loginInApp + " открыл главное меню,дата и время входа " + date);
         System.out.println("1. Покупка билетов на фильмы/мероприятия(Purchasing tickets for films)");
-        System.out.println("2. Просмотреть фильмы/мероприятия (Watch  Movies and Events) ");
-        System.out.println("3. Посмотреть купленные фильмы/мероприятия (View purchased films of the event)");
+        System.out.println("2. Посмотреть фильмы мероприятия в кинотеатре (Watch movies events at the cinema) ");
+        System.out.println("3. Вернуть купленные фильмы/мероприятия (View purchased films of the event)");
+        System.out.println("4. Просмотреть  купленные билеты фильмы/мероприятия (View purchased tickets films of the event)");
         System.out.println("0. Выход (Exit)");
         int number = Integer.parseInt(reader.readLine());
         switch (number) {
@@ -34,17 +36,20 @@ public class PersonController {
                 menuPersonController(loginInApp);
                 break;
             case 2:
-                ticketService.viewPurchasedMovieTickets(loginInApp);
+                filmService.watchMoviesEventsAtTheCinema(loginInApp);
                 menuPersonController(loginInApp);
                 break;
             case 3:
                 ticketService.refundMovieTicket(loginInApp);
                 menuPersonController(loginInApp);
                 break;
+            case 4:
+                ticketService.viewPurchasedMovieTickets(loginInApp);
             case 0:
+                log.info("Пользователь " + loginInApp + "вышел из приложения ");
                 break;
             default:
-                System.out.println("Введите номер меню (Enter menu number)");//ведите номер меню
+                System.out.println("Введите номер меню (Enter menu number)");
                 break;
         }
 
@@ -84,13 +89,16 @@ public class PersonController {
             }
         } else {
             System.err.println("Данного логина не существует, пройдите регистрацию (This username does not exist, please register)");
+            log.error("Данного логина не существует " + loginPersonRead + " " + date);
             generalController.menuCinema();
         }
     }
 
-    protected void registrationPersonInTheAppCinema() throws ClassNotFoundException, IOException {
+    public void registrationPersonInTheAppCinema() throws ClassNotFoundException, IOException {
         String loginPerson;
         String passwordPerson;
+        int loginNumber;
+        int passwordNumber;
         GeneralController generalController = new GeneralController();
         Person person = new Person();
         int numberLogin = 0;
@@ -98,51 +106,62 @@ public class PersonController {
         while (numberLogin < 3) {
             System.out.println("Введите логин пользователя (Enter username)");
             loginPerson = reader.readLine();
-            //TODo сделать минимальное значение по логину и паролю
-
-//            if (loginPerson.length(5)){
-//
-//            }
-            //loginRegist = loginPerson;
+            loginNumber = loginPerson.length();
+            if (loginNumber <= 5) {
+                System.out.println("Слишком кароткий логин введите больше 5 символов/цифр");
+            }
             if (loginPerson.isEmpty()) {
                 System.out.println("Вы не ввели логин (You have not entered a login) " + (numberLogin + 1) + " раз (once)");
+                log.error("Логин пользователя не введен, раз " + numberLogin + " " + date);
                 numberLogin++;
             }
             if (!loginPerson.isEmpty()) {
                 if (personService.readLogin(loginPerson)) {
                     System.out.println("Такой пользователь есть в базе (Such a user exists in the database)");
 
-                } else {
+                }
+                if (loginNumber >= 5) {
                     person.setLoginPerson(loginPerson);
                     System.out.println("Логин введен (Login entered)");
                     break;
                 }
             }
             if (numberLogin == 3) {
-                System.out.println("Колличество попыток закончилось пройдите регистрацию заново (The number of attempts has ended, please register again)");
+                System.out.println("Колличество попыток закончилось пройдите регистрацию заново " +
+                        "(The number of attempts has ended, please register again)");
                 generalController.menuCinema();
             }
         }
+
         while (numberPassword < 3) {
             System.out.println("Введите пароль пользователя (Enter user password)");
             passwordPerson = reader.readLine();
+            passwordNumber = passwordPerson.length();
+            if (passwordNumber <= 5) {
+                System.out.println("Слишком кароткий пароль введите больше 5 символов/цифр");
+            }
             if (passwordPerson.isEmpty()) {
-                System.err.println("Вы не ввели пароль (You have not entered a password )" + (numberPassword + 1) + "раз (once)");
+                System.err.println("Вы не ввели пароль (You have not entered a password )"
+                        + (numberPassword + 1) + "раз (once)");
+                log.error("Пароль пользователя " + person.getLoginPerson() + " введен не верно, раз "
+                        + numberPassword + " " + date);
                 numberPassword++;
             }
-            if (!passwordPerson.isEmpty()) {
+            if (numberPassword == 3) {
+                System.err.println("Колличество попыток ввода пароля закончилось пройдите регистрацию заново " +
+                        "(The number of password attempts has expired, please register again)");
+                generalController.menuCinema();
+            }
+            if (!passwordPerson.isEmpty() && passwordNumber >= 5) {
                 person.setPasswordPerson(passwordPerson);
                 personService.create(person);
                 System.out.println("Вы успешно зарегистрированы (You have successfully registered)");
-                log.info("Успешная зарегистрация под логином " + person.getLoginPerson());
-                generalController.menuCinema();
-            }
-            if (numberPassword == 3) {
-                System.err.println("Колличество попыток ввода пароля закончилось пройдите регистрацию заново (The number of password attempts has expired, please register again)");
+                log.info("Успешная зарегистрация под логином " + person.getLoginPerson() + " " + date);
                 generalController.menuCinema();
             }
         }
-
     }
 
 }
+
+

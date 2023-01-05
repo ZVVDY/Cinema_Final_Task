@@ -4,10 +4,12 @@ import com.java.repository.PersonRepository;
 import com.java.repository.PersonRepositoryImp;
 import com.java.service.PersonService;
 import com.java.service.PersonServiceImp;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+@Slf4j
 public class GeneralController {
 
     private PersonService service = new PersonServiceImp();
@@ -32,6 +34,7 @@ public class GeneralController {
                     break;
                 case 0:
                     System.out.println("Вы вышли из программы Кинотеатр (You are out of the Cinema program)");
+                    log.info("Вы вышли из программы Кинотеатр (You are out of the Cinema program)");
                     break;
                 default:
                     System.out.println("Введите номер меню 0,1,2 (Enter menu number 0,1,2)");
@@ -39,6 +42,7 @@ public class GeneralController {
             }
         } catch (Exception e) {
             System.err.println("Введите цифры 0,1,2, а не символы(Enter the number 0,1,2, not symbols)");
+            log.error("Введите цифры 0,1,2, а не символы(Enter the number 0,1,2, not symbols)");
         } finally {
             menuCinema();
         }

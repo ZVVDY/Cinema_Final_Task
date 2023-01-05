@@ -29,16 +29,23 @@ public class PersonServiceImp implements PersonService {
 
     @Override
     public String seachRole(String userName, String personPassword) {
-        return personRepository.seachRole(userName,personPassword);
+        return personRepository.seachRole(userName, personPassword);
     }
 
     @Override
     public void update() {
+
         personRepository.updatePerson();
     }
 
     @Override
     public void delete() {
+
         personRepository.deletePerson();
+    }
+
+    @Override
+    public void createPerson() {
+        personRepository.createPerson();
     }
 }

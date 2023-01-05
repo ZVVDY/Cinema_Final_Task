@@ -1,13 +1,16 @@
 package com.java.repository;
 
+import com.java.controller.PersonController;
 import com.java.model.Person;
 import com.java.model.RoleClient;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 
+@Slf4j
 public class PersonRepositoryImp implements PersonRepository {
     private static String driver = "com.mysql.jdbc.Driver";
     private static String url = "jdbc:mysql://127.0.0.1:3307/cinema";
@@ -112,6 +115,7 @@ public class PersonRepositoryImp implements PersonRepository {
 
     @Override
     public void updatePerson() {
+        log.info("Пользователь  вошел в меню,изменения пользователей ");
         Person person = new Person();
         try {
             Class.forName(driver);
@@ -139,16 +143,20 @@ public class PersonRepositoryImp implements PersonRepository {
                         person.getLoginPerson(), person.getPasswordPerson(), scanId);
                 ps = connect.prepareStatement(sql);
                 ps.execute();
-                System.out.println("Изменения внесены успешно пользователь с новым именем(Changes made successfully) "
+                System.out.println("Изменения внесены успешно, пользователь с новым именем(Changes made successfully) "
+                        + person.getLoginPerson());
+                log.info("Изменения внесены успешно, пользователь с новым именем(Changes made successfully) "
                         + person.getLoginPerson());
             }
         } catch (SQLException | ClassNotFoundException | IOException e) {
+            log.error("Ошибка базы данных, отсутсвие класса или другая ошибка");
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void deletePerson() {
+        log.info("Пользователь  вошел в меню,удаления пользователей ");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             Class.forName(driver);
@@ -176,6 +184,8 @@ public class PersonRepositoryImp implements PersonRepository {
                     ps.executeUpdate();
                     System.out.println("Удаление пользователя(Deleting a user) " + namePerson +
                             " выполнено (performed)");
+                    log.info("Удаление пользователя(Deleting a user) " + namePerson +
+                            " выполнено (performed)");
                     System.out.println("Происходит очистка билетов занятых пользователем " +
                             "(Tickets occupied by the user are cleared)" + namePerson);
                     sql = String.format(("UPDATE `ticket` SET `username`=NULL, `flagTicketPurchased` =0 WHERE " +
@@ -183,10 +193,12 @@ public class PersonRepositoryImp implements PersonRepository {
                     ps = connect.prepareStatement(sql);
                     ps.execute();
                     System.out.println("Возрат билета выполнен (Ticket refund completed)");
+                    log.info("Возрат билета выполнен (Ticket refund completed)");
                 }
 
                 if (count == 0) {
                     System.err.println("Ошибка удаления пользователя(Error deleting user) " + namePerson);
+                    log.error("Ошибка удаления пользователя(Error deleting user) " + namePerson);
                 }
             }
 
@@ -197,7 +209,6 @@ public class PersonRepositoryImp implements PersonRepository {
 
     @Override
     public String searchForAPersonInTheDatabase() {
-
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
@@ -205,16 +216,24 @@ public class PersonRepositoryImp implements PersonRepository {
             sql = "SELECT * FROM `person` `username` WHERE `role_client`='CLIENT_PERSON'";
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
-
             while (resultSet.next()) {
                 System.out.println("id" + resultSet.getString("id") + " username " + resultSet.getString("username"));
             }
             System.out.println("Введите и выберите пользователя");
             String nameLogin = reader.readLine();
-
             return nameLogin;
-
         } catch (SQLException | ClassNotFoundException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void createPerson() {
+        log.info("Пользователь  вошел в меню,создания пользователей ");
+        PersonController controller = new PersonController();
+        try {
+            controller.registrationPersonInTheAppCinema();
+        } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }

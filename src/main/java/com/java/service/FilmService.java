@@ -7,5 +7,7 @@ public interface FilmService {
 
     void createEventsAndMovies();
 
+    void watchMoviesEventsAtTheCinema(String loginApp);
+
     void deleteEventsAndMovies();
 }

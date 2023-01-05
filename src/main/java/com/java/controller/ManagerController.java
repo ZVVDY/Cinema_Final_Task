@@ -1,12 +1,14 @@
 package com.java.controller;
 
 import com.java.service.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
 
+@Slf4j
 public class ManagerController {
     private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private FilmService service = new FilmServiceImp();
@@ -18,6 +20,7 @@ public class ManagerController {
     protected void menuManagerController(String loginInApp) throws IOException {
         System.out.println("Вы вошли в приложение под логином: (You are logged into the app using:)" + loginInApp);
         System.out.println("Дата входа (Release date) " + date);
+        log.info("Пользователь " + loginInApp + " открыл меню менеджера,дата и время входа " + date);
         System.out.println("1. Просмотреть доступные фильмы/мероприятия(View available films of the event");
         System.out.println("2. Добавить фильмы/мероприятия (Add MoviesEvents");
         System.out.println("3. Добавить билеты в фильмы/мероприятия (Add Tickets to MoviesEvents)");
@@ -29,23 +32,30 @@ public class ManagerController {
         switch (number) {
             case 1:
                 service.viewEventsAndMovies(loginInApp);
+                menuManagerController(loginInApp);
                 break;
             case 2:
                 service.createEventsAndMovies();
+                menuManagerController(loginInApp);
                 break;
             case 3:
                 ticketService.createTicket();
+                menuManagerController(loginInApp);
                 break;
             case 4:
                 ticketService.buyAMovieTicket();
+                menuManagerController(loginInApp);
                 break;
             case 5:
                 ticketService.refundMovieTicket(personService.searchForAPersonInTheDatabase());
+                menuManagerController(loginInApp);
                 break;
             case 6:
                 service.editEventsAndMovies();
+                menuManagerController(loginInApp);
                 break;
             case 0:
+                log.info("Пользователь вышел из програмы");
                 break;
             default:
                 System.out.println("Введите номер меню (Enter menu number)");
