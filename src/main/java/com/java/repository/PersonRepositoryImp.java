@@ -1,7 +1,5 @@
 package com.java.repository;
 
-import com.java.controller.GeneralController;
-import com.java.controller.PersonController;
 import com.java.model.Person;
 import com.java.model.RoleClient;
 import lombok.extern.slf4j.Slf4j;
