@@ -5,7 +5,7 @@ import com.java.repository.TicketRepositoryImp;
 
 public class TicketServiceImp implements TicketService {
 
-    public TicketRepository repository = new TicketRepositoryImp();
+    private TicketRepository repository = new TicketRepositoryImp();
 
     @Override
 

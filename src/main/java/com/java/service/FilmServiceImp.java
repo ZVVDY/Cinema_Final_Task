@@ -4,7 +4,7 @@ import com.java.repository.FilmRepository;
 import com.java.repository.FilmRepositoryImp;
 
 public class FilmServiceImp implements FilmService {
-    public FilmRepository filmRepository = new FilmRepositoryImp();
+    private FilmRepository filmRepository = new FilmRepositoryImp();
 
     @Override
     public void viewEventsAndMovies(String loginApp) {
