@@ -120,7 +120,7 @@ public class PersonController {
             if (!loginPerson.isEmpty()) {
                 if (personService.readLogin(loginPerson)) {
                     System.out.println("Такой пользователь есть в базе (Such a user exists in the database)");
-
+                    generalController.menuCinema();
                 }
                 if (loginNumber >= 5) {
                     person.setLoginPerson(loginPerson);
