@@ -12,38 +12,47 @@ public class Film {
     }
 
     public void setIdMovie(int idMovie) {
+
         this.idMovie = idMovie;
     }
 
     public String getNameMovie() {
+
         return nameMovie;
     }
 
     public void setNameMovie(String nameMovie) {
+
         this.nameMovie = nameMovie;
     }
 
     public String getDateAndTimeFilm() {
+
         return dateAndTimeFilm;
     }
 
     public void setDateAndTimeFilm(String dateAndTimeFilm) {
+
         this.dateAndTimeFilm = dateAndTimeFilm;
     }
 
     public int getQuantityTicket() {
+
         return quantityTicket;
     }
 
     public void setQuantityTicket(int quantityTicket) {
+
         this.quantityTicket = quantityTicket;
     }
 
     public int getCostTicket() {
+
         return costTicket;
     }
 
     public void setCostTicket(int costTicket) {
+
         this.costTicket = costTicket;
     }
 

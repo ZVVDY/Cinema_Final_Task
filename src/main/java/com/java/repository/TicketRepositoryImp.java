@@ -46,7 +46,9 @@ public class TicketRepositoryImp implements TicketRepository {
             Integer scannerBayTiketPlace = Integer.parseInt(reader.readLine());
             log.info("Выбрано место " + scannerBayTiketPlace);
             ticket.setFlagTicketPurchased(true);
-            sql = String.format(("UPDATE `ticket` SET `username`='%s', `flagTicketPurchased` =%b WHERE `numberplace`=%d"), loginApp, ticket.getFlagTicketPurchased(), scannerBayTiketPlace);
+            sql = String.format(("UPDATE `ticket` SET `username`='%s', `flagTicketPurchased` =%b WHERE " +
+                            "`numberplace`=%d AND `id_film` = %d"), loginApp, ticket.getFlagTicketPurchased(), scannerBayTiketPlace,
+                    idFilm);
             ps = connect.prepareStatement(sql);
             ps.execute();
             log.info("Пользователь совершил покупку на мероприятие/фильм ");
@@ -80,24 +82,19 @@ public class TicketRepositoryImp implements TicketRepository {
                         resultSet.getString("numberplace") + " Ticket price: " +
                         resultSet.getString("cost_ticket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
             }
+            System.out.println("Введите id фильма для возврата билета( Enter ID film number for ticket refund)");
+            Integer idFilm = Integer.parseInt(reader.readLine());
             System.out.println("Введите номер места для возврата билета( Enter seat number for ticket refund)");
             Integer scannerBayTiketPlace = Integer.parseInt(reader.readLine());
-            sql = String.format(("UPDATE `ticket` SET `username`=NULL, `flagTicketPurchased` =0 WHERE `numberplace`=%d"), scannerBayTiketPlace);
+            sql = String.format(("UPDATE ticket SET username=NULL, flagTicketPurchased =0 WHERE numberplace=%d AND " +
+                    "id_film = %d AND username ='%s'"), scannerBayTiketPlace, idFilm, personName);
             ps = connect.prepareStatement(sql);
             ps.execute();
             System.out.println("Возрат билета выполнен (Ticket refund completed)");
             log.info("Пользователь " + personName + " вернул билет" + scannerBayTiketPlace + " на фильм/мероприятие ");
             if (!resultSet.next()) {
                 System.out.println(" У вас нет купленных билетов (You have no purchased tickets)");
-                System.out.println("Введите 0 ,что бы вернуться в предыдущее меню (Enter 0 to return to the previous menu)");
-                //int numberBack = Integer.parseInt(reader.readLine());
-//                if (numberBack == 0) {
-//                    PersonController personController = new PersonController();
-//                    personController.menuPersonController(personName);
-//                }
             }
-
-
         } catch (SQLException | ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -105,26 +102,26 @@ public class TicketRepositoryImp implements TicketRepository {
 
     @Override
     public void viewPurchasedMovieTicketsPerson(String nameLogin) {
-        log.info("Пользователь " + nameLogin + " открыл список фильмов мероприятий для просмотра");
+        log.info("Пользователь " + nameLogin + " открыл список купленных фильмов мероприятий для просмотра");
         try {
             Class.forName(driver);
             connect = DriverManager.getConnection(url, username, password);
-            System.out.println("Список фильмов мероприятий для просмотра (List of events films to watch)");
+            System.out.println("Список купленных билетов фильмов мероприятий для просмотра (List of events films to watch)");
             sql = String.format("SELECT * FROM `ticket` WHERE `username`='%s'", nameLogin);
             ps = connect.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
             if (!resultSet.next()) {
                 System.out.println("У вас нет купленных билетов (You do not have purchased tickets)");
                 System.out.println("Выберете мероприятия для покупки (Select events to buy)");
-                PersonController personController = new PersonController();
-                personController.menuPersonController(nameLogin);
+            } else {
+                resultSet.beforeFirst();
+                while (resultSet.next()) {
+                    System.out.println(resultSet.getString("id_film") + " Film/Event " + resultSet.getString("filmname") + " Place number: " +
+                            resultSet.getString("numberplace") + " Ticket price: " +
+                            resultSet.getString("cost_ticket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
+                }
             }
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString("id_film") + " Film/Event " + resultSet.getString("filmname") + " Place number: " +
-                        resultSet.getString("numberplace") + " Ticket price: " +
-                        resultSet.getString("cost_ticket") + " Place is free " + resultSet.getString("flagTicketPurchased").equals("0"));
-            }
-        } catch (SQLException | ClassNotFoundException | IOException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

@@ -45,6 +45,8 @@ public class PersonController {
                 break;
             case 4:
                 ticketService.viewPurchasedMovieTickets(loginInApp);
+                menuPersonController(loginInApp);
+                break;
             case 0:
                 log.info("Пользователь " + loginInApp + "вышел из приложения ");
                 break;

@@ -23,26 +23,32 @@ public class Person {
     }
 
     public Long getId() {
+
         return id;
     }
 
     public void setId(Long id) {
+
         this.id = id;
     }
 
     public String getLoginPerson() {
+
         return loginPerson;
     }
 
     public void setLoginPerson(String loginPerson) {
+
         this.loginPerson = loginPerson;
     }
 
     public String getPasswordPerson() {
+
         return passwordPerson;
     }
 
     public void setPasswordPerson(String passwordPerson) {
+
         this.passwordPerson = passwordPerson;
     }
 }
